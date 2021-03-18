@@ -40,7 +40,7 @@ public class Main {
         System.out.println (objectList.toString () );
         System.out.println (objectList2.toString () );
 
-        //------3
+        //-----3
         Orange orange = new Orange (1.5f);
         Apple apple = new Apple (1.0f);
         Box <Orange> orangeBox = new Box<> ();
