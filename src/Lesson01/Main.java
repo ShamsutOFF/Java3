@@ -52,7 +52,7 @@ public class Main {
         appleBox.addFruit (7, apple);
         appleBox2.addFruit (6, apple);
         orangeBox.addFruit (5, orange);
-        orangeBox2.addFruit (4, orange);
+        orangeBox2.addFruit (3, orange);
 
         System.out.println (orangeBox.compare (appleBox));
 
