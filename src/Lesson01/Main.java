@@ -49,8 +49,8 @@ public class Main {
         Box <Orange> orangeBox2 = new Box<> ();
         Box <Apple> appleBox2 = new Box<> ();
 
-        appleBox.addFruit (8, apple);
-        appleBox2.addFruit (5, apple);
+        appleBox.addFruit (7, apple);
+        appleBox2.addFruit (6, apple);
         orangeBox.addFruit (5, orange);
         orangeBox2.addFruit (4, orange);
 
