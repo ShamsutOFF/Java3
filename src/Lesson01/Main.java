@@ -20,9 +20,6 @@ true – если она равны по весу, false – в противно
 Не забываем про метод добавления фрукта в коробку.
  */
 public class Main {
-
-
-
     public static void main(String[] args) {
         String [] strArr = {"One", "Two", "Three", "Four", "Five"};
         Integer [] integersArr = {1,2,3,4,5};
