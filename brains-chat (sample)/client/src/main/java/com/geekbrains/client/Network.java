@@ -16,7 +16,8 @@ public class Network {
     private static Callback callOnCloseConnection;
 
     static {
-        Callback empty = args -> { };
+        Callback empty = args -> {
+        };
         callOnMsgReceived = empty;
         callOnAuthenticated = empty;
         callOnException = empty;
@@ -41,75 +42,75 @@ public class Network {
 
     public static void sendAuth(String login, String password) {
         try {
-            if (socket == null || socket.isClosed()) {
-                connect();
+            if (socket == null || socket.isClosed ( )) {
+                connect ( );
             }
-            out.writeUTF("/auth " + login + " " + password);
+            out.writeUTF ("/auth " + login + " " + password);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
     }
 
     public static void connect() {
         try {
-            socket = new Socket("localhost", 8189);
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
-            Thread clientListenerThread = new Thread(() -> {
+            socket = new Socket ("localhost", 8189);
+            in = new DataInputStream (socket.getInputStream ( ));
+            out = new DataOutputStream (socket.getOutputStream ( ));
+            Thread clientListenerThread = new Thread (() -> {
                 try {
                     while (true) {
-                        String msg = in.readUTF();
-                        if (msg.startsWith("/authok ")) {
-                            callOnAuthenticated.callback(msg.split("\\s")[1]);
+                        String msg = in.readUTF ( );
+                        if (msg.startsWith ("/authok ")) {
+                            callOnAuthenticated.callback (msg.split ("\\s")[1]);
                             break;
                         }
                     }
                     while (true) {
-                        String msg = in.readUTF();
-                        if (msg.equals("/end")) {
+                        String msg = in.readUTF ( );
+                        if (msg.equals ("/end")) {
                             break;
                         }
-                        callOnMsgReceived.callback(msg);
+                        callOnMsgReceived.callback (msg);
                     }
                 } catch (IOException e) {
-                    callOnException.callback("Соединение с сервером разорвано");
+                    callOnException.callback ("Соединение с сервером разорвано");
                 } finally {
-                    closeConnection();
+                    closeConnection ( );
                 }
             });
-            clientListenerThread.setDaemon(true);
-            clientListenerThread.start();
+            clientListenerThread.setDaemon (true);
+            clientListenerThread.start ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
     }
 
     public static boolean sendMsg(String msg) {
         try {
-            out.writeUTF(msg);
+            out.writeUTF (msg);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
             return false;
         }
     }
 
     public static void closeConnection() {
-        callOnCloseConnection.callback();
+        callOnCloseConnection.callback ( );
         try {
-            in.close();
+            in.close ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
         try {
-            out.close();
+            out.close ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
         try {
-            socket.close();
+            socket.close ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
     }
 }
