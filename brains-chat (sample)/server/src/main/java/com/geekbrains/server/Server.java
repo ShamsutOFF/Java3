@@ -16,14 +16,15 @@ public class Server {
     public Server() {
         clients = new Vector<> ( );
         authService = new SimpleAuthService ( );
-        try (ServerSocket serverSocket = new ServerSocket (8189)) {
+        try (ServerSocket serverSocket = new ServerSocket (8189) ;
+        DBHelper instance = DBHelper.getInstance ( )) {
             System.out.println ("Сервер запущен на порту 8189");
             while (true) {
                 Socket socket = serverSocket.accept ( );
                 new ClientHandler (this, socket);
                 System.out.println ("Подключился новый клиент");
             }
-        } catch (IOException e) {
+        } catch(IOException e){
             e.printStackTrace ( );
         }
         System.out.println ("Сервер завершил свою работу");

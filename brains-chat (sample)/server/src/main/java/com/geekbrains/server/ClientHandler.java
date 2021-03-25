@@ -20,77 +20,90 @@ public class ClientHandler {
         try {
             this.server = server;
             this.socket = socket;
-            this.in = new DataInputStream(socket.getInputStream());
-            this.out = new DataOutputStream(socket.getOutputStream());
-            new Thread(() -> {
+            this.in = new DataInputStream (socket.getInputStream ( ));
+            this.out = new DataOutputStream (socket.getOutputStream ( ));
+            new Thread (() -> {
                 try {
                     while (true) {
-                        String msg = in.readUTF();
-                        // /auth login1 pass1
-                        if (msg.startsWith("/auth ")) {
-                            String[] tokens = msg.split("\\s");
-                            String nick = server.getAuthService().getNicknameByLoginAndPassword(tokens[1], tokens[2]);
-                            if (nick != null && !server.isNickBusy(nick)) {
-                                sendMsg("/authok " + nick);
+                        String msg = in.readUTF ( );
+                        if (msg.startsWith ("/auth ")) {
+                            String[] tokens = msg.split ("\\s");
+                            String nick = server.getAuthService ( ).getNicknameByLoginAndPassword (tokens[1], tokens[2]);
+                            if (nick != null && !server.isNickBusy (nick)) {
+                                sendMsg ("/authok " + nick);
                                 nickname = nick;
-                                server.subscribe(this);
-
-
+                                server.subscribe (this);
 
                                 break;
                             }
                         }
                     }
                     while (true) {
-                        String msg = in.readUTF();
-                        if(msg.startsWith("/")) {
-                            if (msg.equals("/end")) {
-                                sendMsg("/end");
+                        String msg = in.readUTF ( );
+                        if (msg.startsWith ("/")) {
+                            if (msg.equals ("/end")) {
+                                sendMsg ("/end");
                                 break;
                             }
-                            if(msg.startsWith("/w ")) {
-                                String[] tokens = msg.split("\\s", 3);
-                                server.privateMsg(this, tokens[1], tokens[2]);
+                            if (msg.startsWith ("/w ")) {
+                                String[] tokens = msg.split ("\\s", 3);
+                                server.privateMsg (this, tokens[1], tokens[2]);
                             }
+                            //---
+//                            if (msg.startsWith ("/upNick")){
+//                                String[] tokens = msg.split ("\\s",2);
+//
+//                                if (tokens.length == 2 && !tokens[1].trim ().equals ("")){
+//                                    String newNickname = tokens[1].trim ();
+//
+//                                    if (!server.isNickBusy (newNickname ) && authService.updateNickname(getNickname (),newNickname)){
+//                                        String message = String.format ("Никнейм пользователя \"%s\" был заменен на \"%s\"", getNickname (), newNickname);
+//                                        server.broadcastMsg (message);
+//
+//                                        nickname = newNickname;
+//                                        server.broadcastClientsList ();
+//                                    }
+//                                }
+//                            }
                         } else {
-                            server.broadcastMsg(nickname + ": " + msg);
+                            server.broadcastMsg (nickname + ": " + msg);
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace ( );
                 } finally {
-                    ClientHandler.this.disconnect();
+                    ClientHandler.this.disconnect ( );
                 }
-            }).start();
+            }).start ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
     }
 
     public void sendMsg(String msg) {
         try {
-            out.writeUTF(msg);
+            out.writeUTF (msg);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
     }
 
     public void disconnect() {
-        server.unsubscribe(this);
+        server.unsubscribe (this);
         try {
-            in.close();
+            in.close ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
         try {
-            out.close();
+            out.close ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
         try {
-            socket.close();
+            socket.close ( );
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
     }
 }
