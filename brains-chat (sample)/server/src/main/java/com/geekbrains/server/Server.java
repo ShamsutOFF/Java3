@@ -22,12 +22,16 @@ public class Server {
             while (true) {
                 Socket socket = serverSocket.accept ( );
                 new ClientHandler (this, socket);
-                System.out.println ("Подключился новый клиент");
+//                System.out.println ("Подключился новый клиент");
             }
         } catch (IOException e) {
             e.printStackTrace ( );
         }
         System.out.println ("Сервер завершил свою работу");
+    }
+
+    public void serviceMsg(String s) {
+        System.out.println (s);
     }
 
     public void broadcastMsg(String msg) {

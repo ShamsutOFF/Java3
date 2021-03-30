@@ -30,12 +30,12 @@ public class Controller implements Initializable {
 
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
-        authPanel.setVisible(!authenticated);
-        authPanel.setManaged(!authenticated);
-        msgPanel.setVisible(authenticated);
-        msgPanel.setManaged(authenticated);
-        clientsList.setVisible(authenticated);
-        clientsList.setManaged(authenticated);
+        authPanel.setVisible (!authenticated);
+        authPanel.setManaged (!authenticated);
+        msgPanel.setVisible (authenticated);
+        msgPanel.setManaged (authenticated);
+        clientsList.setVisible (authenticated);
+        clientsList.setManaged (authenticated);
         if (!authenticated) {
             nickname = "";
         }
@@ -43,62 +43,76 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setAuthenticated(false);
-        clientsList.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                String nickname = clientsList.getSelectionModel().getSelectedItem();
-                msgField.setText("/w " + nickname + " ");
-                msgField.requestFocus();
-                msgField.selectEnd();
+        setAuthenticated (false);
+        clientsList.setOnMouseClicked (event -> {
+            if (event.getClickCount ( ) == 2) {
+                String nickname = clientsList.getSelectionModel ( ).getSelectedItem ( );
+                msgField.setText ("/w " + nickname + " ");
+                msgField.requestFocus ( );
+                msgField.selectEnd ( );
             }
         });
-        linkCallbacks();
+        linkCallbacks ( );
     }
 
     public void sendAuth() {
-        Network.sendAuth(loginField.getText(), passField.getText());
-        loginField.clear();
-        passField.clear();
+        Network.sendAuth (loginField.getText ( ), passField.getText ( ));
+        loginField.clear ( );
+        passField.clear ( );
     }
 
     public void sendMsg() {
-        if (Network.sendMsg(msgField.getText())) {
-            msgField.clear();
-            msgField.requestFocus();
+        if (Network.sendMsg (msgField.getText ( ))) {
+            msgField.clear ( );
+            msgField.requestFocus ( );
+        }
+    }
+
+    public void upNick() {
+            msgField.clear ( );
+            msgField.setText ("/upNick ");
+//            msgField.requestFocus ( );
+    }
+
+    public void sendExit() {
+        try {
+            Network.sendMsg ("/end");
+        } finally {
+            Platform.exit ( );
         }
     }
 
     public void showAlert(String msg) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING, msg, ButtonType.OK);
-            alert.showAndWait();
+        Platform.runLater (() -> {
+            Alert alert = new Alert (Alert.AlertType.WARNING, msg, ButtonType.OK);
+            alert.showAndWait ( );
         });
     }
 
     public void linkCallbacks() {
-        Network.setCallOnException(args -> showAlert(args[0].toString()));
+        Network.setCallOnException (args -> showAlert (args[0].toString ( )));
 
-        Network.setCallOnCloseConnection(args -> setAuthenticated(false));
+        Network.setCallOnCloseConnection (args -> setAuthenticated (false));
 
-        Network.setCallOnAuthenticated(args -> {
-            setAuthenticated(true);
-            nickname = args[0].toString();
+        Network.setCallOnAuthenticated (args -> {
+            setAuthenticated (true);
+            nickname = args[0].toString ( );
         });
 
-        Network.setCallOnMsgReceived(args -> {
-            String msg = args[0].toString();
-            if (msg.startsWith("/")) {
-                if (msg.startsWith("/clients ")) {
-                    String[] tokens = msg.split("\\s");
-                    Platform.runLater(() -> {
-                        clientsList.getItems().clear();
+        Network.setCallOnMsgReceived (args -> {
+            String msg = args[0].toString ( );
+            if (msg.startsWith ("/")) {
+                if (msg.startsWith ("/clients ")) {
+                    String[] tokens = msg.split ("\\s");
+                    Platform.runLater (() -> {
+                        clientsList.getItems ( ).clear ( );
                         for (int i = 1; i < tokens.length; i++) {
-                            clientsList.getItems().add(tokens[i]);
+                            clientsList.getItems ( ).add (tokens[i]);
                         }
                     });
                 }
             } else {
-                textArea.appendText(msg + "\n");
+                textArea.appendText (msg + "\n");
             }
         });
     }

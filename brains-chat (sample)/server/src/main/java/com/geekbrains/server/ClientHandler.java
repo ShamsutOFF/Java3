@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ClientHandler {
     private String nickname;
@@ -33,7 +34,7 @@ public class ClientHandler {
                                 sendMsg ("/authok " + nick);
                                 nickname = nick;
                                 server.subscribe (this);
-
+                                server.serviceMsg (nickname + " подключился");
                                 break;
                             }
                         }
@@ -42,6 +43,7 @@ public class ClientHandler {
                         String msg = in.readUTF ( );
                         if (msg.startsWith ("/")) {
                             if (msg.equals ("/end")) {
+                                server.serviceMsg (nickname + " отключился");
                                 sendMsg ("/end");
                                 break;
                             }
@@ -49,22 +51,22 @@ public class ClientHandler {
                                 String[] tokens = msg.split ("\\s", 3);
                                 server.privateMsg (this, tokens[1], tokens[2]);
                             }
-                            //---
-//                            if (msg.startsWith ("/upNick")){
-//                                String[] tokens = msg.split ("\\s",2);
-//
-//                                if (tokens.length == 2 && !tokens[1].trim ().equals ("")){
-//                                    String newNickname = tokens[1].trim ();
-//
-//                                    if (!server.isNickBusy (newNickname ) && authService.updateNickname(getNickname (),newNickname)){
-//                                        String message = String.format ("Никнейм пользователя \"%s\" был заменен на \"%s\"", getNickname (), newNickname);
-//                                        server.broadcastMsg (message);
-//
-//                                        nickname = newNickname;
-//                                        server.broadcastClientsList ();
-//                                    }
-//                                }
-//                            }
+                            if (msg.startsWith ("/upNick")) {
+                                String[] tokens = msg.split ("\\s", 2);
+//                                server.serviceMsg (Arrays.toString (tokens));
+                                if (tokens.length == 2 && !tokens[1].trim ( ).equals (" ")) {
+                                    String newNickname = tokens[1].trim ( );
+//                                    server.serviceMsg (newNickname);
+
+                                    if (!server.isNickBusy (newNickname) && server.getAuthService ( ).updateNickname (getNickname ( ), newNickname)) {
+                                        String message = String.format ("Никнейм пользователя \"%s\" был заменен на \"%s\"", getNickname ( ), newNickname);
+                                        server.broadcastMsg (message);
+
+                                        nickname = newNickname;
+                                        server.broadcastClientsList ( );
+                                    }
+                                }
+                            }
                         } else {
                             server.broadcastMsg (nickname + ": " + msg);
                         }

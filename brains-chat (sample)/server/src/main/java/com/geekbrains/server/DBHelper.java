@@ -9,6 +9,7 @@ public class DBHelper implements AutoCloseable {
 
     private static PreparedStatement findByLoginAndPassword;
     private static PreparedStatement changeNick;
+    private Server server;
 
     private DBHelper() {
     }
@@ -74,7 +75,6 @@ public class DBHelper implements AutoCloseable {
         try {
             changeNick.setString (1, newNickname);
             changeNick.setString (2, oldNickname);
-
             return changeNick.executeUpdate ( );
         } catch (SQLException e) {
             e.printStackTrace ( );
