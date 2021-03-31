@@ -4,10 +4,20 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class Controller implements Initializable {
     @FXML
@@ -41,6 +51,7 @@ public class Controller implements Initializable {
         }
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setAuthenticated (false);
@@ -69,9 +80,11 @@ public class Controller implements Initializable {
     }
 
     public void upNick() {
-            msgField.clear ( );
-            msgField.setText ("/upNick ");
-//            msgField.requestFocus ( );
+        msgField.clear ( );
+        msgField.setText ("/upNick ");
+        msgField.requestFocus ( );
+        msgField.selectEnd ( );
+
     }
 
     public void sendExit() {
@@ -97,6 +110,35 @@ public class Controller implements Initializable {
         Network.setCallOnAuthenticated (args -> {
             setAuthenticated (true);
             nickname = args[0].toString ( );
+        //    Window stage = clientsList.getScene ().getWindow ( );
+
+          //  stage = (Stage) clientsList.getScene().getWindow();
+           // stage.setTitle (nickname);
+            //--------- 3 задание ---------//
+            Path historyPath = Paths.get ("client/src/main/java/com/geekbrains/client/history/history_" + nickname + ".txt");
+            try {
+                if (Files.exists (historyPath)) {
+                    List<String> listLines = Files.readAllLines (historyPath);
+                    if (listLines.size ( ) > 100) {
+                        listLines.subList (listLines.size ( ) - 100, listLines.size ( )).forEach (new Consumer<String> ( ) {
+                            @Override
+                            public void accept(String s) {
+                                textArea.appendText (s + "\n");
+                            }
+                        });
+                    } else {
+                        listLines.forEach (new Consumer<String> ( ) {
+                            @Override
+                            public void accept(String s) {
+                                textArea.appendText (s + "\n");
+                            }
+                        });
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace ( );
+            }
+            //-----------
         });
 
         Network.setCallOnMsgReceived (args -> {
@@ -113,6 +155,17 @@ public class Controller implements Initializable {
                 }
             } else {
                 textArea.appendText (msg + "\n");
+
+                //-----3 задание
+                Path testFilePath = Paths.get ("client/src/main/java/com/geekbrains/client/history/history_" + nickname + ".txt");
+                try {
+                    String txt = msg + "\n";
+                    byte[] bs = txt.getBytes ( );
+                    Files.write (testFilePath, bs, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                } catch (Exception e) {
+                    e.printStackTrace ( );
+                }
+                //-----------
             }
         });
     }

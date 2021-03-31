@@ -12,7 +12,7 @@ public class SimpleAuthService implements AuthService {
     @Override
     public boolean updateNickname(String oldNickname, String newNickname) {
         int result = dbHelper.updateNickname (oldNickname, newNickname);
-        System.out.println ("result= " + result );
+//        System.out.println ("result= " + result );
         return result != 0;
     }
 }
