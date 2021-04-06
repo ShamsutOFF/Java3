@@ -21,65 +21,67 @@ true – если она равны по весу, false – в противно
  */
 public class Main {
     public static void main(String[] args) {
-        String [] strArr = {"One", "Two", "Three", "Four", "Five"};
-        Integer [] integersArr = {1,2,3,4,5};
+        String[] strArr = {"One", "Two", "Three", "Four", "Five"};
+        Integer[] integersArr = {1, 2, 3, 4, 5};
 
         //------1
         System.out.println (Arrays.toString (strArr));
         System.out.println (Arrays.toString (integersArr));
-        relocateMethod (strArr,2,5);
-        relocateMethod (integersArr,2,5);
+        relocateMethod (strArr, 2, 5);
+        relocateMethod (integersArr, 2, 5);
         System.out.println (Arrays.toString (strArr));
         System.out.println (Arrays.toString (integersArr));
 
         //------2
-        ArrayList<Object> objectList = new ArrayList( );
-        ArrayList<Object> objectList2 = new ArrayList( );
-        toListMethod(objectList,strArr);
-        toListMethod (objectList2,integersArr);
-        System.out.println (objectList.toString () );
-        System.out.println (objectList2.toString () );
+        ArrayList<Object> objectList = new ArrayList ( );
+        ArrayList<Object> objectList2 = new ArrayList ( );
+        toListMethod (objectList, strArr);
+        toListMethod (objectList2, integersArr);
+        System.out.println (objectList.toString ( ));
+        System.out.println (objectList2.toString ( ));
 
         //-----3
         Orange orange = new Orange (1.5f);
         Apple apple = new Apple (1.0f);
-        Box <Orange> orangeBox = new Box<> ();
-        Box <Apple> appleBox = new Box<> ();
+        Box<Orange> orangeBox = new Box<> ( );
+        Box<Apple> appleBox = new Box<> ( );
 
-        Box <Orange> orangeBox2 = new Box<> ();
-        Box <Apple> appleBox2 = new Box<> ();
+        Box<Orange> orangeBox2 = new Box<> ( );
+        Box<Apple> appleBox2 = new Box<> ( );
 
-        appleBox.addFruit (7, apple);
+        appleBox.addFruit (20, apple);
         appleBox2.addFruit (6, apple);
-        orangeBox.addFruit (5, orange);
-        orangeBox2.addFruit (4, orange);
+        orangeBox.addFruit (8, orange);
+        orangeBox2.addFruit (3, orange);
 
         System.out.println (orangeBox.compare (appleBox));
 
-        System.out.println ( "Вес коробки яблок 1: " + appleBox.getWeight ());
-        System.out.println ( "Вес коробки яблок 2: " + appleBox2.getWeight ());
-        System.out.println ( "Пересыпали яблоки");
-        appleBox.pour(appleBox2);
-        System.out.println ( "Вес коробки яблок 1: " + appleBox.getWeight ());
-        System.out.println ( "Вес коробки яблок 2: " + appleBox2.getWeight ());
+        System.out.println ("Вес коробки яблок 1: " + appleBox.getWeight ( ));
+        System.out.println ("Вес коробки яблок 2: " + appleBox2.getWeight ( ));
+        System.out.println ("Пересыпали яблоки");
+        appleBox.pour (appleBox2);
+        System.out.println ("Вес коробки яблок 1: " + appleBox.getWeight ( ));
+        System.out.println ("Вес коробки яблок 2: " + appleBox2.getWeight ( ));
 
         System.out.println ( );
 
-        System.out.println ( "Вес коробки апельсинов 1: " + orangeBox.getWeight ());
-        System.out.println ( "Вес коробки апельсинов 2: " + orangeBox2.getWeight ());
-        System.out.println ( "Пересыпали яблоки");
-        orangeBox.pour(orangeBox2);
-        System.out.println ( "Вес коробки апельсинов 1: " + orangeBox.getWeight ());
-        System.out.println ( "Вес коробки апельсинов 2: " + orangeBox2.getWeight ());
+        System.out.println ("Вес коробки апельсинов 1: " + orangeBox.getWeight ( ));
+        System.out.println ("Вес коробки апельсинов 2: " + orangeBox2.getWeight ( ));
+        System.out.println ("Пересыпали апельсины");
+        orangeBox.pour (orangeBox2);
+        System.out.println ("Вес коробки апельсинов 1: " + orangeBox.getWeight ( ));
+        System.out.println ("Вес коробки апельсинов 2: " + orangeBox2.getWeight ( ));
     }
-//---1
-public static void relocateMethod(Object arr[],int a, int b){
-    Object o = arr[a-1];
-    arr[a-1] = arr[b-1];
-    arr[b-1] = o;
-}
-//---2
-    public static void toListMethod(ArrayList<Object> list,Object arr[]){
-        Collections.addAll(list, arr);
+
+    //---1
+    public static void relocateMethod(Object arr[], int a, int b) {
+        Object o = arr[a - 1];
+        arr[a - 1] = arr[b - 1];
+        arr[b - 1] = o;
+    }
+
+    //---2
+    public static void toListMethod(ArrayList<Object> list, Object arr[]) {
+        Collections.addAll (list, arr);
     }
 }
