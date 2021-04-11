@@ -1,13 +1,10 @@
 package test.java;
 
-import Lesson06.Main;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static Lesson06.Main.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static Lesson06.Main.method01;
+import static Lesson06.Main.method02;
 
 class MainTest {
 
